@@ -3,9 +3,11 @@ package services
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	"os"
+	"time"
 
 	"coop-connect-go/src/config"
 	"coop-connect-go/src/types"
@@ -14,6 +16,7 @@ import (
 type VendorService struct {
 	vendors        map[string]types.Vendor
 	productService ProductService
+	filePath       string
 }
 
 func NewVendorService(filePath string) (*VendorService, error) {
@@ -44,7 +47,7 @@ func NewVendorService(filePath string) (*VendorService, error) {
 		return nil, err
 	}
 
-	return &VendorService{vendors: vendorMap, productService: *productService}, nil
+	return &VendorService{vendors: vendorMap, productService: *productService, filePath: filePath}, nil
 }
 
 func (vs *VendorService) GetById(id string) types.Vendor {
@@ -69,4 +72,46 @@ func (vs *VendorService) GetVendorByProductID(id string) (types.Vendor, error) {
 		return types.Vendor{}, errors.New("vendor not found")
 	}
 	return vendor, nil
+}
+
+func (vs *VendorService) getVendorValues() []types.Vendor {
+	values := make([]types.Vendor, 0, len(vs.vendors))
+	for _, value := range vs.vendors {
+		values = append(values, value)
+	}
+	return values
+}
+
+func (vs *VendorService) commitVendorsToFile() error {
+	file, err := os.Create(vs.filePath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	byteValue, err := json.Marshal(vs.getVendorValues())
+	if err != nil {
+		return err
+	}
+
+	_, err = file.Write(byteValue)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (vs *VendorService) Insert(vendor types.Vendor) types.Vendor {
+	vendor.ID = generateRandomID()
+	vs.vendors[vendor.ID] = vendor
+	err := vs.commitVendorsToFile()
+	if err != nil {
+		log.Printf("Failed to commit vendors to file: %v", err)
+	}
+	return vendor
+}
+
+func generateRandomID() string {
+	return fmt.Sprintf("%d", time.Now().UnixNano())
 }

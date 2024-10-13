@@ -45,3 +45,13 @@ func (ps *ProductService) GetById(id string) (types.Product, bool) {
 	product, exists := ps.products[id]
 	return product, exists
 }
+
+func (ps *ProductService) GetProductsByVendorID(vendorID string) []types.Product {
+	products := []types.Product{}
+	for _, product := range ps.products {
+		if product.VendorID == vendorID {
+			products = append(products, product)
+		}
+	}
+	return products
+}

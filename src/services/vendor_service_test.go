@@ -4,9 +4,45 @@ import (
 	"coop-connect-go/src/config"
 	"coop-connect-go/src/services"
 	"coop-connect-go/src/types"
-	"reflect"
 	"testing"
 )
+
+func TestCreateVendor(t *testing.T) {
+	tests := []struct {
+		name     string
+		vendor   types.Vendor
+		expected types.Vendor
+	}{
+		{
+			name: "Basic test",
+			vendor: types.Vendor{
+				ID:    "",
+				Name:  "Vendor 3",
+				Email: "vendor3@gmail.com",
+			},
+			expected: types.Vendor{
+				Name:  "Vendor 3",
+				Email: "vendor3@gmail.com",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			vendorService, err := services.NewVendorService(config.APP_ROOT + "/data/vendors.json")
+			if err != nil {
+				t.Errorf("failed to create vendor service: %v", err)
+			}
+			vendor := vendorService.Insert(tt.vendor)
+			if vendor.Name != tt.expected.Name {
+				t.Errorf("expected vendor name %s, got %s", tt.expected.Name, vendor.Name)
+			}
+			if vendor.Email != tt.expected.Email {
+				t.Errorf("expected vendor email %s, got %s", tt.expected.Email, vendor.Email)
+			}
+		})
+	}
+}
 
 func TestGetVendorById(t *testing.T) {
 	tests := []struct {
@@ -91,9 +127,6 @@ func TestGetVendorByProductId(t *testing.T) {
 			}
 			if vendor.Name != tt.expected.Name {
 				t.Errorf("expected vendor name %s, got %s", tt.expected.Name, vendor.Name)
-			}
-			if !reflect.DeepEqual(vendor.Products, tt.expected.Products) {
-				t.Errorf("expected vendor products %v, got %v", tt.expected.Products, vendor.Products)
 			}
 		})
 	}

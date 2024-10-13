@@ -1,8 +1,7 @@
 package types
 
 type Vendor struct {
-	ID       string
-	Name     string
-	Email    string
-	Products []Product
+	ID    string
+	Name  string
+	Email string
 }
