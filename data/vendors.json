@@ -2,35 +2,11 @@
   {
     "ID": "1",
     "Name": "Vendor 1",
-    "Email": "vendor1@gmail.com",
-    "Products": [
-      {
-        "ID": "1",
-        "Name": "Product 1",
-        "VendorID": "1"
-      },
-      {
-        "ID": "2",
-        "Name": "Product 2",
-        "VendorID": "1"
-      }
-    ]
+    "Email": "vendor1@gmail.com"
   },
   {
     "ID": "2",
     "Name": "Vendor 2",
-    "Email": "vendor2@gmail.com",
-    "Products": [
-      {
-        "ID": "3",
-        "Name": "Product 3",
-        "VendorID": "2"
-      },
-      {
-        "ID": "4",
-        "Name": "Product 4",
-        "VendorID": "2"
-      }
-    ]
+    "Email": "vendor2@gmail.com"
   }
 ]

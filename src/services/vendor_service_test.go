@@ -20,18 +20,6 @@ func TestGetVendorByProductId(t *testing.T) {
 			expected: types.Vendor{
 				ID:   "1",
 				Name: "Vendor 1",
-				Products: []types.Product{
-					{
-						ID:       "1",
-						Name:     "Product 1",
-						VendorID: "1",
-					},
-					{
-						ID:       "2",
-						Name:     "Product 2",
-						VendorID: "1",
-					},
-				},
 			},
 		},
 	}
